@@ -397,13 +397,68 @@ myData.someMethod {$0 == 13}
 > 初始化函数表达式的语法
 
 ###显式成员表达式
+显示成员表达式允许我们访问已命名类型、元祖或模块的成员。它由元素和成员的标识符以及二者之间的点（`.`）组成。
+> expression.member name
+
+对于已命名类型，成员是类型定义或扩展的一部分。例如：
+> class SomeClass {
+    var someProperty = 42
+}
+let c = SomeClass()
+let y = c.someProperty  // Member access
+
+对于元祖，成员通过从零开始的它们出现的顺序整数来访问。例如：
+> var t = (10, 20, 30)
+t.0 = t.1
+// Now t is (20, 20, 30)
+
+对于模块，成员访问的是模块的顶级（top-level）声明。
+> 显示成员表达式的语法
 
 
 ###后缀self表达式
+后缀self表达式由表达式或类名接一个`.self`组成。形式如下：
+> expression.self
+> type.self
+
+第一种形式计算出表达式（`expression`）的值。例如`x.self`就等于`x`。
+第二种形式计算出对应类型（`type`）的值。这种形式可以将某类型作为一个值来访问。例如，由于`SomeClass.self`等于`SomeClass`本身，所以你可以将其传给一个函数或方法。
+> 后缀self表达式的语法
+
+
+
+
+
 
 ###动态类型表达式
 
-###子脚本表达式
+动态类型（`dynamicType`）表达式由表达式接`.dynamicType`组成。形式如下：
+> expression.dynamicType
+
+表达式不能是类型的名字。整个动态类型表达式计算出表达式运行时的值，参见下例：
+> class SomeBaseClass {
+    class func printClassName() {
+        println("SomeBaseClass")
+    }
+}
+class SomeSubClass: SomeBaseClass {
+    override class func printClassName() {
+        println("SomeSubClass")
+    }
+}
+let someInstance: SomeBaseClass = SomeSubClass()
+// someInstance is of type SomeBaseClass at compile time, but
+// someInstance is of type SomeSubClass at runtime
+someInstance.dynamicType.printClassName()
+// prints "SomeSubClass
+
+> 动态类型表达式的语法
+
+###下标脚本表达式
+下标脚本表达式提供了通过响应的下标声明来访问getter/setter方法。形式如下：
+> expression[index expressions]
+
+
 
 ###强取值表达式
 
