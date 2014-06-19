@@ -454,16 +454,34 @@ someInstance.dynamicType.printClassName()
 
 > 动态类型表达式的语法
 
-###下标脚本表达式
-下标脚本表达式提供了通过响应的下标声明来访问getter/setter方法。形式如下：
+###下标表达式
+下标表达式提供了通过响应的下标声明来访问getter/setter方法。形式如下：
 > expression[index expressions]
-
-
+下标表达式可以通过传递下标参数（`index expressions`）计算getter的值，setter亦同理。
+更多关于下标声明的信息，参见Protocol Subscript Declaration。
+> 下标表达式语法：
 
 ###强取值表达式
+强取值表达式用于对非空（not `nil`）的可选值进行拆包。形式如下：
+> expression!
+
+上式中，如果一个`expression`的值不是`nil`，那么该可选值会被拆包并返回响应的类型。否则抛出运行时错误。
+> 强取值表达式的语法：
 
 
 ###可选链式表达式
 
+可选链式表达式提供一种在后缀表达式中使用可选值的简化的语法。形式如下：
+> expression?
+后缀`?`表达式就是简单的将所传参数作为可选值返回。
+包含可选链式表达式的后缀表达式计算起来比较特殊。如果可选链式表达式为`nil`，所有在此后缀表达式中的操作符都将被忽略，然后整个后缀表达式返回`nil`。如果不为`nil`，则可选链式表达式被拆包然后应用于后续的计算。在这两种情况下，该后缀表达式仍然是一个可选值。
+如果一个包含可选链式表达式的后缀表达式嵌套在其他后缀表达式中，只有最外层的返回一个可选类型。下面例子中，当`c`不为`nil`，时，它将被拆包然后用于`.property`和`.performAction()`的计算，整个表达式`c?.property.performAction() `拥有一个可选类型的值。
+> var c: SomeClass?
+var result: Bool? = c?.property.performAction()
 
+如果不使用可选链表达式，那么上面例子的代码等价于：
+> if let unwrappedC = c {
+    result = unwrappedC.property.performAction（）
+}
 
+> 可选链式表达式的语法
